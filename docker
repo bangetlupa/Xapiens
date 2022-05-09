@@ -1,2 +1,97 @@
+(FROM)
+--------------------------------
+FROM alpine:3
+--------------------------------
+docker build -t hendyprima84/from /opt/belajardocker/from
+=================================================================================
+(RUN)
+-----------------------------------
+FROM alpine:3
+RUN mkdir hello
+RUN echo "hello world" > "hello/world.txt"
+RUN cat "hello/world.txt"
+------------------------------------
+#docker build -t hendyprima84/run /opt/belajardocker/run
+===================================================================================
+(COMMAND)
+--------------------------------
+FROM alpine:3
+RUN mkdir hello
+RUN echo "hello world" > "hello/world.txt"
+CMD cat "hello/world.txt"
+--------------------------------
+docker build -t hendyprima84/command /opt/belajardocker/command
+===================================================================================
+(ADD)
+------------------------------------
+FROM alpine:3
+RUN mkdir hello
+ADD text/ *.txt hello
+CMD cat "hello/gans.txt"
+---------------------------------
+docker build -t hendyprima84/add /opt/belajardocker/add
+================================================================================
+(COPY)"sama dengan perintah add bedanya kalo add bisa ambil dari url dan auto extract"
+--------------------------------------
+FROM alpine:3
+RUN mkdir hello
+COPY text/ *.txt hello
+CMD cat "hello/gans.txt"
+------------------------------------
+docker build -t khannedy/copy copy
+docker container create --name copy khannedy/copy
+=================================================================================
+IGNORE (skip dulu)
+=================================================================================
+EXPOSE
+------------------------------------
+FROM golang:1.18-alpine
+RUN mkdir app
+COPY main.go app
+EXPOSE 8080
+CMD go run app/main.go
+------------------------------------
+docker build -t hendyprima84/expose /opt/belajardocker/expose
+sudo docker container create --name expose –p 8084:8080 hendyprima84/expose
+=================================================================================
+(ENV) environment
+--------------------------------------
+FROM golang:1.18-alpine
+ENV APP_PORT=8080
+RUN mkdir app
+COPY main.go app
+EXPOSE ${APP_PORT}
+CMD go run app/main.go
+----------------------------------------
+docker build -t hendyprima84/env /opt/belajardocker/env
+docker image inspect hendyprima84/env
+docker container create --name env --env APP_PORT=9090 -p 9090:9090 hendyprima84/env
+=====================================================================================
+(VOLUME) outomate create volume
+----------------------------------------
+FROM golang:1.18-alpine
+ENV APP_PORT=8080
+ENV APP_DATA=/logs
+RUN mkdir ${APP_DATA}
+RUN mkdir app
+COPY main.go app
+EXPOSE ${APP_PORT}
+VOLUME ${APP_DATA}
+CMD go run app/main.go
+-----------------------------------------
+docker build -t  volume
+docker image inspect khannedy/volume
+docker container create --name volume -p 8080:8080 khannedy/volume
 
-ec2-54-251-8-48.ap-southeast-1.compute.amazonaws.com
+
+
+
+
+
+
+
+
+
+
+
+
