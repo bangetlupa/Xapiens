@@ -82,6 +82,56 @@ CMD go run app/main.go
 docker build -t  volume
 docker image inspect khannedy/volume
 docker container create --name volume -p 8080:8080 khannedy/volume
+=====================================================================================
+(WORKING DIRECTORY) untuk menentukan folder untuk menjalankan intruksi run,cmd,add,copy dll
+-------------------------------------------------------------------------------------------
+FROM golang:1.18-alpine
+WORKDIR /app
+COPY main.go /app
+EXPOSE 8080
+CMD go run main.go
+--------------------------------------------------------------------------------------------
+docker build -t hendyprima84/dir /opt/belajardocker/dir/
+sudo docker container create --name dir -p 8085:8080 hendyprima84/dir
+========================================================================================
+(USER) (jika membuat image ingin aktifkan user tertentu,default image adalah root jika tidak di buatkan user)
+-----------------------------------------------------------------------------------------------------------
+FROM golang:1.18-alpine
+RUN mkdir /app
+RUN addgroup -S hendy
+RUN adduser -S -D -h /app hendy hendy
+RUN chown -R hendy:hendy /app
+USER hendy
+COPY main.go /app
+EXPOSE 8080
+CMD go run /app/main.go
+--------------------------------------------------------------------------------------------------------------
+sudo docker container create --name user -p 8087:8080 hendyprima84/user
+docker build -t hendyprima84/user /opt/belajardocker/user
+contoh main.go ada di : https://github.com/ProgrammerZamanNow/belajar-docker-dockerfile/tree/main/user
+setelah selesai cek : sudo docker container exec -i -t dir /bin/sh
+lalu cek #whoami      harusnya ada di user yg kita buat
+===========================================================================================================
+(ENTRY POINT) execute cmd(command) bisa di kumpulkan disini “entry point”
+-----------------------------------------------------------------------------------------------------
+FROM golang:1.18-alpine
+RUN  mkdir  /app/
+COPY main.go /app/
+EXPOSE 8080
+ENTRYPOINT [“go”, “run” ]
+CMD [“/app/main.go”]
+----------------------------------------------------------------------------------------------------------
+Untuk main.go ada di : https://github.com/ProgrammerZamanNow/belajar-docker-dockerfile/tree/main/entrypoint
+docker build –t hendyprima84/entrypoint /opt/belajardocker/entrypoint
+docker container create –name entry –p 8089:8080 hendyprima84/entrypoint
+===========================================================================================================
+
+
+
+
+
+
+
 
 
 
