@@ -1,0 +1,33 @@
+version: '2'
+
+volumes:
+  cloud:
+  db:
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=cacing123#
+      - MYSQL_PASSWORD=cacing123
+      - MYSQL_DATABASE=cloud
+      - MYSQL_USER=cloud
+
+  app:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - db
+    volumes:
+      - cloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=cacing123
+      - MYSQL_DATABASE=cloud
+      - MYSQL_USER=cloud
+      - MYSQL_HOST=db
